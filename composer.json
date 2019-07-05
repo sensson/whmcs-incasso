@@ -1,0 +1,9 @@
+{
+	"name": "whmcs/incasso",
+	"description": "WHMCS incasso module based on pain.008.001.02",
+	"autoload": {
+		"psr-4": { "Incasso\\": "lib/incasso/"},
+		"psr-4": { "IsoCodes\\": "lib/isocodes/"}
+	}
+}
+
