@@ -16,7 +16,6 @@
  */
 
 // Set up
-ini_set('memory_limit','64M');
 ini_set("mysql.connect_timeout", "1200");
 set_time_limit(0);
 error_reporting(0);

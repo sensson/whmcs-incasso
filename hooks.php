@@ -24,9 +24,25 @@ $loader->addPsr4('Incasso\\', __DIR__ . '/lib/incasso');
 $loader->addPsr4('IsoCodes\\', __DIR__ . '/lib/isocodes');
 $loader->register();
 
+use WHMCS\Billing\Invoice;
 use WHMCS\View\Menu\Item;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Incasso\Models\Mandate;
 use Incasso\Controllers\Client\MandatesController;
+
+function add_mergefields($vars) {
+  // Get the mandate when a new invoice is created
+  if ($vars['messagename'] == 'Invoice Created') {
+    $invoice = Invoice::find($vars['relid']);
+    $client = $invoice->client()->get()[0];
+    $mandate = Mandate::where('customer_id', $client->id)->orderBy('uid', 'desc')->first();
+  }
+
+  $merge_fields['incasso_mandate_reference'] = $mandate->mandate_reference;
+  return $merge_fields;
+}
+
+add_hook('EmailPreSend', 1, 'add_mergefields');
 
 add_hook('ClientAreaPrimarySidebar', -1, function ($sidebar) {
     // This isn't very DRY but we have no other choice unfortunately

@@ -626,7 +626,6 @@ function incasso_output($vars) {
             $invoices_paid = 0;
 
             // Make sure we are not hit by any timeouts
-            ini_set('memory_limit','64M');
             ini_set("mysql.connect_timeout", "1200");
             set_time_limit(0);
 
@@ -724,6 +723,7 @@ function incasso_output($vars) {
                             'mod_incasso_batch.invoice_id as batch_invoiceid'
                         )
                         ->where('tblinvoices.status', '=', 'Unpaid')
+			->where('tblinvoices.total', '!=', '0.00')
                         ->orderBy('tblinvoices.id', 'asc');
 
         // Select invoices
