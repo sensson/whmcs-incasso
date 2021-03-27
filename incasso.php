@@ -67,7 +67,7 @@ function incasso_config() {
  */
 function incasso_activate() {
     // Check if the table exissts
-    if(Capsule::hasTable('mod_incasso') and Capsule::hasTable('mod_incasso_batch') and Capsule::hasTable('mod_incasso_mandates')) {
+    if(Capsule::schema()->hasTable('mod_incasso') and Capsule::schema()->hasTable('mod_incasso_batch') and Capsule::schema()->hasTable('mod_incasso_mandates')) {
         return array(
             'status' => 'success',
             'description' => 'The incasso module has been installed already and is activated.'
