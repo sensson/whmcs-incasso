@@ -3,7 +3,7 @@
  * Incasso direct debit helper class
  *
  * Support is available via info@sensson.net.
- * 
+ *
  * @author		Sensson <info@sensson.net>
  * @copyright	2004-2017 Sensson
  * @license		This software is furnished under a license and may be used and copied
@@ -11,8 +11,8 @@
  * 				inclusion of the above copyright notice.  This software  or any other
  * 				copies thereof may not be provided or otherwise made available to any
  * 				other person.  No title to and  ownership of the  software is  hereby
- * 				transferred. 
- * 				   
+ * 				transferred.
+ *
  */
 
 include_once("isocodes/IsoCodeInterface.php");
@@ -29,11 +29,11 @@ class Incasso {
 		if ($whmcsVersion == 6) {
 			$countries_file = dirname(__FILE__) . '/../../../../includes/countries.php';
 			require($countries_file);
-			
+
 			// No need to rebuild array. Version 6 is formatted as expected.
 			$country_list = $countries;
 		}
-		if ($whmcsVersion == 7) {
+		if ($whmcsVersion >= 7) {
 			$countries_file = dirname(__FILE__) . '/../../../../resources/country/dist.countries.json';
 			$countries = json_decode(file_get_contents($countries_file), true);
 
