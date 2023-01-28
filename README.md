@@ -5,18 +5,15 @@ all European banks that use the pain.008.001.02 standard.
 
 # Documentation
 
-Please see our online [knowledgebase](https://account.sensson.net/support/Knowledgebase/List/Index/31/) for more details.
+Please see the docs folder for more details.
 
-# License and support
+# Development
 
-We strongly believe in the power of open source. Even though this is a commercial module we do not encrypt
-our source code. 
+We strongly believe in the power of open source. This module is our way of saying thanks.
 
-* You are allowed to use the WHMCS incasso module on a single production environment.
-* You are allowed to use the WHMCS incasso module on a single development environment.
-* You are NOT allowed to resell this module. Not even after making changes to it yourself.
-* We do NOT offer phone support. We do provide extensive support via [e-mail](mailto:info@sensson.net).
-* We recommend setting up a development environment to test new versions.
+If you want to contribute please:
 
-Copyright © 2006-2017, [Sensson](https://www.sensson.net).
+1. Fork the repository.
+2. Push to your fork and submit a pull request.
+
 
