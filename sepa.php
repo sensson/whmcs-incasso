@@ -167,7 +167,7 @@ try {
                 // Verify your own settings
                 if(!IsoCodes\Iban::validate($mybankaccount)) {
                     $error = true;
-                    $errors[] = "You have enabled SEPA but your bank account ({$mybankaccount}}) is not a valid IBAN number.";
+                    $errors[] = "You have enabled SEPA but your bank account ({$mybankaccount}) is not a valid IBAN number.";
                 }
                 if(!IsoCodes\SwiftBic::validate($mybic)) {
                     $error = true;
