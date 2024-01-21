@@ -3,6 +3,10 @@
 This module allows you to run direct debits with European banks according to the SEPA format. It supports
 all European banks that use the pain.008.001.02 standard.
 
+# Download
+
+You can download the latest version from the [releases page](https://github.com/sensson/whmcs-incasso/releases).
+
 # Documentation
 
 Please see the docs folder for more details.
