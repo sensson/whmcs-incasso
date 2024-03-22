@@ -852,7 +852,7 @@ function incasso_output($vars) {
 
         // set other variables
         $smarty->assign('totalamount', number_format($totalamount, 2, ',', '.'));
-        $smarty->assign('totalinvoices', count($batch_invoices));
+        $smarty->assign('totalinvoices', count((array) $batch_invoices));
         $smarty->assign('mybankaccount', $mybankaccount);
         $smarty->assign('mybankholder', $mybankholder);
         $smarty->assign('myidentifier', $myidentifier);

@@ -56,16 +56,12 @@ class clsGenerateSepaXML {
 	// returns variable value or empty string if $p_sVarName is not recognized
 	//########################################
 	public function __get($p_sVarName) {
-		switch ($p_sVarName) {
-			case "result":
-				return $this->m_sResult;
-				break;
-			case "error":
-				return $this->m_sError;
-				break;
-		}
-		return "";
-	}
+        return match ($p_sVarName) {
+            "result" => $this->m_sResult,
+            "error" => $this->m_sError,
+            default => "",
+        };
+    }
 
 //*******************************************************
 // SET FUNCTIONS
@@ -93,15 +89,12 @@ class clsGenerateSepaXML {
 //*******************************************************
 // PUBLIC FUNCTIONS
 //*******************************************************
-	
-	//########################################
-	// public addPayment
-	// fills complete array of payment info from given simple array
-	// empty childs will be ignored when xml is build
-	// counts number of transactions and total transaction amount
-	// returns void
-	//########################################
-	public function addPayment ($p_aPayment = array(), $batchType) {
+
+    /**
+     * @throws Exception
+     */
+    public function addPayment($p_aPayment = array(), $batchType = 'RCUR')
+    {
 		// start to build payment info for sepa payment message, all info below is needed for 1 payment
 		if($batchType != "FRST" AND $batchType != "RCUR") {
 			throw new Exception("clsGenerateSepaXML::addPayment - batchType needs to be either FRST or RCUR!");
@@ -141,13 +134,6 @@ class clsGenerateSepaXML {
 		$aCrAgent = array("FinInstnId" => array("BIC" => $p_aPayment["BicCr"]),		//FinancialInstitutionIdentification
 						  "BrnchId" => "",											//BranchIdentification, optional
 		);
-		// sub array UltimateCreditor
-		$aUltimateCreditor = array("Nm" => "",										//Name, optional
-								   "PstlAdr" => "",									//PostalAddress, optional
-								   "Id" => "",										//Identification, optional
-								   "CtryOfRes" => "",								//CountryOfResidence, optional
-								   "CtctDtls" => "",								//ContactDetails, optional
-		);
 		
 		// 4th level sub array Identification for CreditorSchemeIdentification
 		$aCreditorOther = array("Id" => $p_aPayment["CreditorID"],
@@ -166,36 +152,7 @@ class clsGenerateSepaXML {
 		$aPmtId = array("InstrId" => "",											//2.30 InstructionIdentification, optional string(35)
 						"EndToEndId" => $p_aPayment["UniqueIdentifier"],			//2.31 EndToEndIdentification, string(35). Unique identifier
 		);
-		
-		
-		// 5th level sub array for OriginalDebtorAgent in AmendmentInformationDetails in MandateRelatedInformation in DirectDebitTransaction
-		$aOrgnlDbtrAgt = array("FinInstnId" => array("BIC" => $p_aPayment["BicDb"]),//FinancialInstitutionIdentification
-							   "BrnchId" => "",										//BranchIdentification, optional
-		);
-		// 5th level sub array for OriginalDebtorAccount in AmendmentInformationDetails in MandateRelatedInformation in DirectDebitTransaction
-		$aOrgnlDbtrAcct = array("Id" => array("IBAN" => $p_aPayment["IbanDb"]),		//Identification
-								"Tp" => "",											//Type, optional
-								"Ccy" => "",										//Currency, optional
-								"Nm" => "",											//Name, optional
-		);
-		// 5th level sub array for OriginalCreditorSchemeIdentification in AmendmentInformationDetails in MandateRelatedInformation in DirectDebitTransaction
-		$aOrgCdtrSchmeId = array("Nm" => "",										//Name, optional
-								 "PstlAdr" => "",									//PostalAddress, optional
-								 "Id" => "",										//Identification, optional
-								 "CtryOfRes" => "",									//CountryOfResidence, optional
-								 "CtctDtls" => "",									//ContactDetails, optional
-		);
-		// 4th level sub array for AmendmentInformationDetails in MandateRelatedInformation in DirectDebitTransaction
-		$aAmdmntInfDtls = array("OrgnlMndtId" => "",								//2.52 OriginalMandateIdentification, optional
-								"OrgnlCdtrSchmeId" => $aOrgCdtrSchmeId,				//2.53 OriginalCreditorSchemeIdentification, optional
-								"OrgnlCdtrAgt" => "",								//2.54 OriginalCreditorAgent, optional
-								"OrgnlCdtrAgtAcct" => "",							//2.55 OriginalCreditorAgentAccount, optional
-								"OrgnlDbtr" => "",									//2.56 OriginalDebtor, optional
-								"OrgnlDbtrAcct" => $aOrgnlDbtrAcct,					//2.57 OriginalDebtorAccount, optional
-								"OrgnlDbtrAgt" => $aOrgnlDbtrAgt,					//2.58 OriginalDebtorAgent, optional
-								"OrgnlDbtrAgtAcct" => "",							//2.59 OriginalDebtorAgentAccount, optional, not used yet in SEPA for NL
-								"OrgnlFnlColltnDt" => "",							//2.60 OriginalFinalCollectionDate, optional, not used yet in SEPA for NL
-		);
+
 		// 3rd level sub array for MandateRelatedInformation in DirectDebitTransaction
 		$aMndtRltdInf = array("MndtId" => $p_aPayment["MandateID"],					//2.48 MandateIdentification, required
 							  "DtOfSgntr" => $p_aPayment["MandateDateSig"],			//2.49 DateOfSignature, required
@@ -220,13 +177,7 @@ class clsGenerateSepaXML {
 								"PreNtfctnId" => "",								//2.67 PreNotificationIdentification, optional, not used yet in SEPA for NL
 								"PreNtfctnDt" => "",								//2.68 PreNotificationDate, optional, not used yet in SEPA for NL
 		);
-		// 2nd level sub array UltimateCreditor for DirectDebitTransactionInformation
-		$aUltmtCdtr = array("Nm" => "",												//Name, optional
-							"PstlAdr" => "",										//PostalAddress, optional
-							"Id" => "",												//Identification, optional
-							"CtryOfRes" => "",										//CountryOfResidence, optional
-							"CtctDtls" => "",										//ContactDetails, optional
-		);
+
 		// 2nd level sub array DebtorAgent for DirectDebitTransactionInformation
 		$aDbtrAgt = array("FinInstnId" => array("BIC" => $p_aPayment["BicDb"]),		//FinancialInstitutionIdentification
 						  "BrnchId" => "",											//BranchIdentification, optional
@@ -243,13 +194,6 @@ class clsGenerateSepaXML {
 						   "Tp" => "",												//Type, optional
 						   "Ccy" => "",												//Currency, optional
 						   "Nm" => "",												//Name, optional
-		);
-		// 2nd level sub array UltimateDebtor for DirectDebitTransactionInformation
-		$aUltmtDbtr = array("Nm" => "",												//Name, optional
-					   		"PstlAdr" => "",										//PostalAddress, optional
-						    "Id" => "",												//Identification, optional
-						    "CtryOfRes" => "",										//CountryOfResidence, optional
-						    "CtctDtls" => "",										//ContactDetails, optional
 		);
 		// 2nd level sub array Purpose for DirectDebitTransactionInformation, fillt with 2.77 code
 		$aPurpose = array("Cd" => "SUPP",											//2.77 Code via external purpose code list
@@ -307,15 +251,12 @@ class clsGenerateSepaXML {
 		$this->aPaymentsInfo[$batchType] = $aPaymentInfo;
 		
 	}
-	
-	//########################################
-	// public generateXML
-	// to build the SEPA xml file
-	// returns name and location of XML on succes, throws error on failure
-	//########################################
-	public function generateXML($p_aInitiatingParty = array(), $p_sMessageID) {
-		$sXML = "";
-		
+
+    /**
+     * @throws Exception
+     */
+    public function generateXML($p_aInitiatingParty, $p_sMessageID): bool|string
+    {
 		if ((!is_array($p_aInitiatingParty)) && (count($p_aInitiatingParty) < 1)) {
 			throw new Exception("clsGenerateSepaXML::generateXML - p_aInitiatingParty cannot be empty!");
 		}
@@ -380,24 +321,14 @@ class clsGenerateSepaXML {
 		
 	}
 
-//*******************************************************
-// PRIVATE FUNCTIONS
-//*******************************************************
-
-	
-	//########################################
-	// public data2XML
-	// adds data to xml dom, checks for values being array
-	// returns void
-	//########################################
-	private function data2XML($p_aData, $p_objXML) {	
+	private function data2XML($p_aData, $p_objXML)
+    {
 		foreach($p_aData as $sKey => $vValue) {
 			
 			// check if vValue is array, if so, add as child recursive
 			if (is_array($vValue)) {
 				// create child with sKey as name
 				$objNode = $p_objXML->addChild($sKey);
-                $objNodes = $objNode->getName($sKey);
 				
                 //aad array to child in xml dom
                 $this->data2Xml($vValue, $objNode);
@@ -424,6 +355,3 @@ class clsGenerateSepaXML {
     }
 }
 
-
-
-?>
