@@ -841,7 +841,7 @@ function incasso_output($vars) {
             $smarty->assign('customer_error_subject', 'One or more customers contain invalid direct debit data');
         }
 
-        $smarty->assign('batch_invoices', $batch_invoices);
+        $smarty->assign('batch_invoices', (array) $batch_invoices);
 
         // Get a list of all batches
         $all_batches = Capsule::table('mod_incasso_batch')->distinct('batch_id')->select('batch_id', 'date')->orderBy('batch_id', 'desc')->get();
