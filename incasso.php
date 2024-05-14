@@ -51,7 +51,7 @@ function incasso_config() {
     $config = [
         "name"          => "Incasso / SEPA direct debit",
         "description"   => "This module is used to perform direct debits based on the SEPA standard.",
-        "version"       => "4.36",
+        "version"       => "4.37",
         "author"        => "Sensson",
         "language"      => "english"
     ];
